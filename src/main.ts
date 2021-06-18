@@ -1,16 +1,22 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import { matchChanges } from './changes'
+import { getRecentChanges } from './git'
+import { getPackages } from './packages'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    const basePath = process.cwd()
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const files = await getRecentChanges(basePath)
+    core.debug(`Found ${files.length} file changes ...`)
 
-    core.setOutput('time', new Date().toTimeString())
+    const packages = await getPackages(basePath)
+    core.debug(`Project has ${packages.length} packages ...`)
+
+    const changed = matchChanges(files, packages)
+    core.debug(`Detected ${changed.length} packages with changes ...`)
+
+    core.setOutput('pkgs', changed)
   } catch (error) {
     core.setFailed(error.message)
   }
