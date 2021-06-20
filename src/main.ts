@@ -1,13 +1,18 @@
 import * as core from '@actions/core'
-import { matchChanges } from './changes'
-import { getRecentChanges } from './git'
-import { getPackages } from './packages'
+import {matchChanges} from './changes'
+import {getRecentChanges} from './git'
+import {getPackages} from './packages'
 
 async function run(): Promise<void> {
   try {
-    const basePath = process.cwd()
+    const from = core.getInput('from') || 'HEAD^1'
+    const to = core.getInput('to') || 'HEAD'
+    const basePath = core.getInput('path') || process.cwd()
 
-    const files = await getRecentChanges(basePath)
+    // eslint-disable-next-line no-console
+    console.log(from, to, basePath)
+
+    const files = await getRecentChanges(basePath, from, to)
     core.debug(`Found ${files.length} file changes ...`)
 
     const packages = await getPackages(basePath)

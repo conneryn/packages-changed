@@ -1,14 +1,8 @@
 import * as fs from 'fs'
 import * as path from 'path'
+import {parse} from 'json5'
 
-export const {
-  lstat,
-  readdir,
-  readFile,
-  stat,
-} = fs.promises
-
-export const IS_WINDOWS = process.platform === 'win32'
+export const {lstat, readdir, readFile, stat} = fs.promises
 
 export async function exists(fsPath: string): Promise<boolean> {
   try {
@@ -24,11 +18,23 @@ export async function exists(fsPath: string): Promise<boolean> {
   return true
 }
 
-export async function loadJsonFile(...fileSegments: string[]) {
-    const filePath = path.join(...fileSegments)
-    if (await exists(filePath)) {
-        const result = await readFile(filePath)
-        return JSON.parse(result.toString())
-    }
-    return null
+export async function loadJsonFile<T>(
+  ...fileSegments: string[]
+): Promise<T | null> {
+  const data = await loadFile(...fileSegments)
+  if (data) {
+    return parse<T>(data)
+  }
+  return null
+}
+
+export async function loadFile(
+  ...fileSegments: string[]
+): Promise<string | null> {
+  const filePath = path.join(...fileSegments)
+  if (await exists(filePath)) {
+    const result = await readFile(filePath)
+    return result.toString('utf-8')
+  }
+  return null
 }

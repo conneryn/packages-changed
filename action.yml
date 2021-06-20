@@ -1,11 +1,21 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Packages Changed'
+description: 'Find which packages have been changed, use the output to decide what jobs to run next'
+author: 'Connery Noble'
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  from:
+    required: false
+    description: 'check for changes since previous state'
+    default: 'HEAD^1'
+  to:
+    required: false
+    description: 'check for changes to new state'
+    default: 'HEAD'
+  path:
+    required: false
+    description: 'start directory to check for changes'
+outputs:
+  pkgs:
+    description: 'list of packages that have changed'
 runs:
   using: 'node12'
   main: 'dist/index.js'
