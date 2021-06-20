@@ -9,7 +9,7 @@ const basePath = path.resolve(__dirname, '..')
 
 test('getRecentChanges does not throw', async () => {
   await expect(
-    getRecentChanges(basePath, 'HEAD^1', 'HEAD')
+    getRecentChanges(basePath, 'HEAD~1', 'HEAD')
   ).resolves.not.toThrow()
 })
 

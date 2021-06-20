@@ -285,7 +285,7 @@ const packages_1 = __webpack_require__(874);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const from = core.getInput('from') || 'HEAD^1';
+            const from = core.getInput('from') || 'HEAD~1';
             const to = core.getInput('to') || 'HEAD';
             const basePath = core.getInput('path') || process.cwd();
             // eslint-disable-next-line no-console

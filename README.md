@@ -12,7 +12,7 @@ This allows you to control which jobs are run or skipped based on where the code
 
 | Parameter | Description
 | --------- | -----------
-| from      | commit reference to check for changes from.  Default: `HEAD^1`.
+| from      | commit reference to check for changes from.  Default: `HEAD~1`.
 | to        | commit reference to check for changes to. Default: `HEAD`.
 | path      | starting path to look for changes.  Default: the current working directory.
 

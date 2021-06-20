@@ -5,7 +5,7 @@ import {getPackages} from './packages'
 
 async function run(): Promise<void> {
   try {
-    const from = core.getInput('from') || 'HEAD^1'
+    const from = core.getInput('from') || 'HEAD~1'
     const to = core.getInput('to') || 'HEAD'
     const basePath = core.getInput('path') || process.cwd()
 

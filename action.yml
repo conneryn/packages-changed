@@ -5,7 +5,7 @@ inputs:
   from:
     required: false
     description: 'check for changes since previous state'
-    default: 'HEAD^1'
+    default: 'HEAD~1'
   to:
     required: false
     description: 'check for changes to new state'
