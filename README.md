@@ -28,6 +28,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
     - name: Check packages
       id: changes
       uses: conneryn/packages-changed@v1
@@ -48,6 +50,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
     - name: Check packages
       id: changes
       uses: conneryn/packages-changed@v1
