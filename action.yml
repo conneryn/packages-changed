@@ -13,6 +13,7 @@ inputs:
   path:
     required: false
     description: 'start directory to check for changes'
+    default: './'
 outputs:
   pkgs:
     description: 'list of packages that have changed'

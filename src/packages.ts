@@ -1,5 +1,5 @@
 import * as glob from '@actions/glob'
-import path, {dirname} from 'path'
+import * as path from 'path'
 import {loadJsonFile} from './files'
 
 export type Package = {
@@ -27,7 +27,7 @@ async function getPackage(pkgJsonFile: string): Promise<Package> {
   const pkgJson = await loadJsonFile<PkgJson>(pkgJsonFile)
   if (pkgJson === null) throw new Error(`Failed to load ${pkgJsonFile}`)
 
-  const dir = dirname(pkgJsonFile)
+  const dir = path.dirname(pkgJsonFile)
   const tsConfig = await loadJsonFile<TsConfig>(dir, 'tsconfig.json')
 
   const dependencies = Object.assign(

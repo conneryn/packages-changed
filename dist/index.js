@@ -279,6 +279,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(186));
+const path = __importStar(__webpack_require__(622));
 const changes_1 = __webpack_require__(654);
 const git_1 = __webpack_require__(374);
 const packages_1 = __webpack_require__(874);
@@ -287,15 +288,13 @@ function run() {
         try {
             const from = core.getInput('from') || 'HEAD~1';
             const to = core.getInput('to') || 'HEAD';
-            const basePath = core.getInput('path') || process.cwd();
-            // eslint-disable-next-line no-console
-            console.log(from, to, basePath);
+            const basePath = path.resolve(process.cwd(), core.getInput('path'));
             const files = yield git_1.getRecentChanges(basePath, from, to);
-            core.debug(`Found ${files.length} file changes ...`);
+            core.info(`Found ${files.length} file changes ...`);
             const packages = yield packages_1.getPackages(basePath);
-            core.debug(`Project has ${packages.length} packages ...`);
+            core.info(`Project has ${packages.length} packages ...`);
             const changed = changes_1.matchChanges(files, packages);
-            core.debug(`Detected ${changed.length} packages with changes ...`);
+            core.info(`Detected ${changed.length} packages with changes ...`);
             core.setOutput('pkgs', changed);
         }
         catch (error) {
@@ -351,13 +350,13 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getPackages = void 0;
 const glob = __importStar(__webpack_require__(90));
-const path_1 = __importStar(__webpack_require__(622));
+const path = __importStar(__webpack_require__(622));
 const files_1 = __webpack_require__(743);
 function getPackages(basePath) {
     var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
         const globPatterns = [
-            path_1.default.join(basePath, '**', 'package.json'),
+            path.join(basePath, '**', 'package.json'),
             '!**/node_modules/**'
         ];
         const globber = yield glob.create(globPatterns.join('\n'));
@@ -384,7 +383,7 @@ function getPackage(pkgJsonFile) {
         const pkgJson = yield files_1.loadJsonFile(pkgJsonFile);
         if (pkgJson === null)
             throw new Error(`Failed to load ${pkgJsonFile}`);
-        const dir = path_1.dirname(pkgJsonFile);
+        const dir = path.dirname(pkgJsonFile);
         const tsConfig = yield files_1.loadJsonFile(dir, 'tsconfig.json');
         const dependencies = Object.assign({}, pkgJson.dependencies || {}, pkgJson.devDependencies || {}, pkgJson.optionalDependencies || {});
         return {
@@ -401,9 +400,9 @@ function paths(packageRoot, pkgJson, tsConfig) {
         if (!items)
             return;
         if (Array.isArray(items))
-            results.push(...items.map(item => path_1.default.resolve(packageRoot, item)));
+            results.push(...items.map(item => path.resolve(packageRoot, item)));
         else if (typeof items === 'string')
-            results.push(path_1.default.resolve(packageRoot, items));
+            results.push(path.resolve(packageRoot, items));
         else if (typeof items === 'object')
             add(Object.values(items));
     };
