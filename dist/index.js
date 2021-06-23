@@ -225,7 +225,7 @@ function getSubmodules(basePath) {
     return __awaiter(this, void 0, void 0, function* () {
         const submodules = yield execCmd('git', ['config', '--file', '.gitmodules', '--get-regexp', 'path'], { cwd: basePath, ignoreReturnCode: true });
         return submodules
-            .map(s => s.split(' ', 1)[1])
+            .map(s => s.slice(s.indexOf(' ')))
             .map(s => path.resolve(basePath, s));
     });
 }
@@ -233,6 +233,8 @@ function getSubmoduleChanges(basePath, submodule) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const diff = yield execCmd('git', ['diff', submodule], { cwd: basePath });
+        if (!diff.length)
+            return [];
         const to = (_a = diff.pop()) === null || _a === void 0 ? void 0 : _a.split(' ').pop();
         const from = (_b = diff.pop()) === null || _b === void 0 ? void 0 : _b.split(' ').pop();
         if (!from || !to)
@@ -299,6 +301,7 @@ function run() {
         }
         catch (error) {
             core.setFailed(error.message);
+            throw error;
         }
     });
 }

@@ -22,6 +22,8 @@ async function run(): Promise<void> {
     core.setOutput('pkgs', changed)
   } catch (error) {
     core.setFailed(error.message)
+
+    throw error
   }
 }
 
