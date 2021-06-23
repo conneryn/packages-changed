@@ -57,7 +57,7 @@ async function getSubmodules(basePath: string): Promise<string[]> {
   )
 
   return submodules
-    .map(s => s.split(' ', 1)[1])
+    .map(s => s.slice(s.indexOf(' ')))
     .map(s => path.resolve(basePath, s))
 }
 
@@ -66,6 +66,8 @@ async function getSubmoduleChanges(
   submodule: string
 ): Promise<string[]> {
   const diff = await execCmd('git', ['diff', submodule], {cwd: basePath})
+  if (!diff.length) return []
+
   const to = diff.pop()?.split(' ').pop()
   const from = diff.pop()?.split(' ').pop()
 
