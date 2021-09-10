@@ -2,21 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import {parse} from 'json5'
 
-export const {lstat, readdir, readFile, stat} = fs.promises
-
-export async function exists(fsPath: string): Promise<boolean> {
-  try {
-    await stat(fsPath)
-  } catch (err) {
-    if (err.code === 'ENOENT') {
-      return false
-    }
-
-    throw err
-  }
-
-  return true
-}
+export const {readdir, readFile} = fs.promises
 
 export async function loadJsonFile<T>(
   ...fileSegments: string[]
@@ -31,10 +17,14 @@ export async function loadJsonFile<T>(
 export async function loadFile(
   ...fileSegments: string[]
 ): Promise<string | null> {
-  const filePath = path.join(...fileSegments)
-  if (await exists(filePath)) {
+  try {
+    const filePath = path.join(...fileSegments)
     const result = await readFile(filePath)
     return result.toString('utf-8')
+  } catch (error: unknown) {
+    if ((error as {code: string}).code === 'ENOENT') {
+      return null
+    }
+    throw error
   }
-  return null
 }

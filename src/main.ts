@@ -20,9 +20,8 @@ async function run(): Promise<void> {
     core.info(`Detected ${changed.length} packages with changes ...`)
 
     core.setOutput('pkgs', changed)
-  } catch (error) {
-    core.setFailed(error.message)
-
+  } catch (error: unknown) {
+    core.setFailed(error as Error)
     throw error
   }
 }
