@@ -16,9 +16,16 @@ This allows you to control which jobs are run or skipped based on where the code
 | to        | commit reference to check for changes to. Default: `HEAD`.
 | path      | starting path to look for changes.  Default: the current working directory.
 
+## Outputs
+
+| Parameter | Type      | Description
+| --------- | --------- | -----------
+| pkgs      | string[]  | Array of package names (ex: `["@conneryn/pkg1","@conneryn/pkg2"]`)
+| dirs      | string[]  | Array of root directories for each package that has changed (ex: `["packages/pk1/","packages/pkg2"])
+
 ## Usage Examples
 
-### Scope yarn builds
+### Scope lerna tests
 
 ```yaml
 jobs:
@@ -29,13 +36,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        fetch-depth: 2
+        fetch-depth: 0
     - name: Check packages
       id: changes
       uses: conneryn/packages-changed@v1
     - name: Run tests
       run: |
-        yarn test --scope '${{ join(steps.changes.outputs.pkgs, ',') }}'
+        lerna test --scope '${{ join(steps.changes.outputs.pkgs, ',') }}'
 ```
 
 ### Control Jobs by package

@@ -19,9 +19,18 @@ async function run(): Promise<void> {
     const changed = matchChanges(files, packages)
     core.info(`Detected ${changed.length} packages with changes ...`)
 
-    core.setOutput('pkgs', changed)
+    core.setOutput(
+      'pkgs',
+      changed.map(p => p.name)
+    )
+    core.setOutput(
+      'dirs',
+      changed.map(p => p.dir)
+    )
   } catch (error) {
-    core.setFailed(error.message)
+    if (error instanceof Error) {
+      core.setFailed(error)
+    }
 
     throw error
   }
