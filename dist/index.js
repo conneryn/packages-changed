@@ -111,9 +111,10 @@ function exists(fsPath) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield exports.stat(fsPath);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }
         catch (err) {
-            if (err.code === 'ENOENT') {
+            if ((err === null || err === void 0 ? void 0 : err.code) === 'ENOENT') {
                 return false;
             }
             throw err;
