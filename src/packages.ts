@@ -4,6 +4,7 @@ import {loadJsonFile} from './files'
 
 export type Package = {
   name: string
+  dir: string
   paths: string[]
   dependencies: string[]
 }
@@ -39,6 +40,7 @@ async function getPackage(pkgJsonFile: string): Promise<Package> {
 
   return {
     name: pkgJson.name,
+    dir,
     dependencies: Object.keys(dependencies),
     paths: paths(dir, pkgJson, tsConfig)
   }

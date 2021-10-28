@@ -7,8 +7,9 @@ export const {lstat, readdir, readFile, stat} = fs.promises
 export async function exists(fsPath: string): Promise<boolean> {
   try {
     await stat(fsPath)
-  } catch (err) {
-    if (err.code === 'ENOENT') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    if (err?.code === 'ENOENT') {
       return false
     }
 

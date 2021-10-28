@@ -13,7 +13,7 @@ type Lookup = {
   package: Package
 }
 
-export function matchChanges(files: string[], packages: Package[]): string[] {
+export function matchChanges(files: string[], packages: Package[]): Package[] {
   const lookup = new Map<string, Lookup>(
     packages.map(p => [
       p.name,
@@ -66,5 +66,5 @@ export function matchChanges(files: string[], packages: Package[]): string[] {
   // Return all changed packages
   return Array.from(lookup.values())
     .filter(p => p.status === LookupStatus.Changed)
-    .map(p => p.package.name)
+    .map(p => p.package)
 }
